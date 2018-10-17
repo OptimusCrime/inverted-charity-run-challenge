@@ -1,0 +1,26 @@
+.ring {
+  width: 200px;
+  height: 200px;
+  border-radius: 100%;
+  background: transparent;
+  box-shadow: 2px 2px 4px @good-secondary-color, inset 2px 2px 4px @good-secondary-color;
+  border: 8px solid @good-color;
+  font-size: 30px;
+  display: inline-block;
+  line-height: 200px;
+  box-sizing: content-box;
+
+  span {
+    color: @good-text;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.status-component-bad .ring {
+  border-color: @bad-color;
+  box-shadow: 2px 2px 4px @bad-secondary-color, inset 2px 2px 4px @bad-secondary-color;
+  span {
+    color: @bad-text;
+  }
+}
