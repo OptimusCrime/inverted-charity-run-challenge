@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'semantic-ui-react';
 
-import { GraphComponent } from '../../components/graph/graph-component';
+import { GraphComponent } from '../components/graph/graph-component';
 
 class GraphContainer extends Component {
 

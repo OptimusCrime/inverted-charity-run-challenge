@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "dev": "webpack --mode development",
     "build": "webpack --mode development",
     "build:prod": "webpack --mode production",
     "watch": "webpack --mode development"
@@ -44,7 +45,6 @@
     "babel-core": "^6.13.2",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-3": "^6.24.1",
-    "clean-webpack-plugin": "^0.1.19",
     "less": "^2.7.1",
     "mini-css-extract-plugin": "^0.4.1"
   }

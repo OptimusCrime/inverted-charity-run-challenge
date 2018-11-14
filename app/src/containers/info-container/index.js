@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Segment } from 'semantic-ui-react';
 
 import { InfoRowComponent } from '../../components/info-row/info-row-component';
+import {formatDonations} from "../../utilities";
 
 class InfoContainer extends Component {
 
@@ -10,9 +11,9 @@ class InfoContainer extends Component {
 
     const {
       entryFetchFinished,
-      statusFetchFinished,
-
       entryFetchFailed,
+
+      statusFetchFinished,
       statusFetchFailed,
 
       currentChallenge,
@@ -21,23 +22,19 @@ class InfoContainer extends Component {
     if (entryFetchFinished && statusFetchFinished && !entryFetchFailed && !statusFetchFailed) {
 
       const {
-        progress,
         date_start,
         date_end,
-        entries,
-        target,
-      } = currentChallenge;
-
-      const {
+        distance_target,
         active,
         days_since_start,
         days_remaining,
-        schedule_limit,
-      } = progress;
+        donations_removed
+      } = currentChallenge;
 
-      if (active) {
-        return (
-          <Segment inverted className='info-container'>
+      return (
+        <Segment inverted className='info-container'>
+          {active &&
+          <React.Fragment>
             <InfoRowComponent
               label='Days since start'
               text={days_since_start}
@@ -46,18 +43,18 @@ class InfoContainer extends Component {
               label='Days remaining'
               text={days_remaining}
             />
-            <InfoRowComponent
-              label='Entries'
-              text={entries}
-            />
-            <InfoRowComponent
-              label='Target'
-              text={target}
-            />
-            <InfoRowComponent
-              label='Progress'
-              text={schedule_limit.toFixed(2)}
-            />
+          </React.Fragment>
+          }
+          <InfoRowComponent
+            label='Target'
+            text={`${distance_target} km`}
+          />
+          <InfoRowComponent
+            label='Donations removed'
+            text={`${formatDonations(donations_removed)} NOK`}
+          />
+          {!active &&
+          <React.Fragment>
             <InfoRowComponent
               label='Challenge started'
               text={date_start}
@@ -66,28 +63,8 @@ class InfoContainer extends Component {
               label='Challenge end'
               text={date_end}
             />
-          </Segment>
-        );
-      }
-
-      return (
-        <Segment inverted className='info-container'>
-          <InfoRowComponent
-            label='Entries'
-            text={entries}
-          />
-          <InfoRowComponent
-            label='Target'
-            text={target}
-          />
-          <InfoRowComponent
-            label='Challenge started'
-            text={date_start}
-          />
-          <InfoRowComponent
-            label='Challenge end'
-            text={date_end}
-          />
+          </React.Fragment>
+          }
         </Segment>
       );
     }
@@ -98,9 +75,9 @@ class InfoContainer extends Component {
 
 const mapStateToProps = ({ status, entry, display }) => ({
   entryFetchFinished: entry.fetchFinished,
-  statusFetchFinished: status.fetchFinished,
-
   entryFetchFailed: entry.fetchFailed,
+
+  statusFetchFinished: status.fetchFinished,
   statusFetchFailed: status.fetchFailed,
 
   currentChallenge: display.currentChallenge,

@@ -1,6 +1,7 @@
 <?php
 namespace OptimusCrime\Endpoints;
 
+use OptimusCrime\Containers\Challenges;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -13,7 +14,7 @@ class Entry extends Base
     {
         return $this->output(
             $response,
-            GetEntry::get($this->container->get('settings')['challenges'])
+            GetEntry::get($this->container->get(Challenges::class))
         );
     }
 
@@ -24,8 +25,6 @@ class Entry extends Base
         if ($payload === null) {
             return $response->withStatus(400);
         }
-
-
 
         return $this->output($response, [
             'status' => PutEntry::put(

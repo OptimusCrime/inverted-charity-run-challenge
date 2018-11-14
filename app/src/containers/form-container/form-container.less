@@ -1,0 +1,38 @@
+.form-segment {
+  background-color: @form-background;
+}
+.form-container {
+  &__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 1rem;
+  }
+  &__label {
+    width: 40%;
+    font-size: 1.25rem;
+  }
+  &__input {
+    width: 60%;
+    text-align: right;
+  }
+  &__distance {
+    text-align: right;
+
+    input {
+      width: 40%;
+    }
+  }
+  &__duration {
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+
+    .input {
+      width: 45%;
+    }
+    input {
+      width: 25%;
+    }
+  }
+}

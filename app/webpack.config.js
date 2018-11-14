@@ -4,42 +4,45 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const CSS_LOADERS = [
+  'css-loader',
+  'less-loader',
+];
+
+const PLUGINS = [
+  new HtmlWebpackPlugin({
+    template: './src/index.html',
+    chunks: true
+  })
+];
 
 module.exports = (env, argv) => {
 
-  const cssLoaders = argv.mode === 'development' ? [
-    'style-loader',
-    'css-loader',
-    'less-loader',
-  ] : [
-    MiniCssExtractPlugin.loader,
-    'css-loader',
-    'less-loader',
-  ];
+  if (argv.mode === 'development') {
+    CSS_LOADERS.unshift('style-loader');
+  }
+  else {
 
-  const htmlPlugin = new HtmlWebpackPlugin({
-    template: './src/index.html',
-    chunks: true
-  });
+    CSS_LOADERS.unshift(MiniCssExtractPlugin.loader);
+  }
 
-  const plugins = argv.mode === 'development' ? [ htmlPlugin ] : [
-    new CleanWebpackPlugin([
-      'dist/*',
-    ], {
-      exclude: ['.gitignore']
-    }),
-    htmlPlugin,
-    new MiniCssExtractPlugin(),
-    new OptimizeCSSAssetsPlugin(),
-  ];
+  if (argv.mode === 'production') {
+    PLUGINS.push(
+      new MiniCssExtractPlugin(),
+      new OptimizeCSSAssetsPlugin(),
+    );
+  }
 
   return {
     output: {
-      filename: '[name].[contenthash].js',
-      path: path.resolve(__dirname, argv.mode === 'development' ? 'dist' : 'prod'),
-      chunkFilename: 'vendor.js',
+      filename: argv.mode === 'development' ? 'dev.[name].js' : '[name].js?hash=[contenthash]',
+      chunkFilename: argv.mode === 'development' ? 'dev.vendor.js' : 'vendor.js?hash=[contenthash]',
+
+      path: path.resolve(__dirname, '..', 'server', 'react'),
+
       pathinfo: false,
+      publicPath: 'static/'
     },
     devtool: argv.mode === 'development' ? 'eval-source-map' : '',
     resolve: {
@@ -60,7 +63,7 @@ module.exports = (env, argv) => {
               '.css'
             ],
           },
-          use: cssLoaders,
+          use: CSS_LOADERS,
         }, {
           test: /\.(png|gif|jpe?|eot|svg|ttf|woff|woff2)(\?[a-z0-9=&.]+)?$/,
           loader: 'file-loader',
@@ -84,6 +87,6 @@ module.exports = (env, argv) => {
         }
       },
     },
-    plugins: plugins
+    plugins: PLUGINS
   }
 };

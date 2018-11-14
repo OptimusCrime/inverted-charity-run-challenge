@@ -38,13 +38,8 @@ class SettingsParser
                 'default_migration_table' => 'phinxlog',
                 'default_database' => 'production',
                 'production' => [
-                    'adapter' => 'mysql',
-                    'host' => getenv('DATABASE_HOST'),
-                    'name' => getenv('DATABASE_TABLE'),
-                    'user' => getenv('DATABASE_USER'),
-                    'pass' => getenv('DATABASE_PASSWORD'),
-                    'port' => getenv('DATABASE_PORT'),
-                    'charset' => 'utf8',
+                    'adapter' => 'sqlite',
+                    'name' => getenv('DB_PATH')
                 ],
             ]
         ];

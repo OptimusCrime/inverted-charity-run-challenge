@@ -1,9 +1,5 @@
-export const mapChallenges = challenges => challenges.map(challenge => ({
-  identifier: challenge.identifier,
-}));
-
 export const mapCurrentChallenge = challenges => {
-  const currentChallenge = challenges.find(challenge => challenge.progress.current);
+  const currentChallenge = challenges.find(challenge => challenge.current);
   return currentChallenge ? currentChallenge : challenges[0];
 };
 

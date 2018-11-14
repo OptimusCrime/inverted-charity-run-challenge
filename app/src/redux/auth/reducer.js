@@ -4,10 +4,14 @@ import {
 
   AUTH_UPDATE_STARTED,
   AUTH_UPDATE_FINISHED,
-  AUTH_UPDATE_FAILED
+  AUTH_UPDATE_FAILED,
+
+  AUTH_TOGGLE_DISPLAY_MODAL
 } from './constants';
 
 const defaultState = {
+  showModalAuth: false,
+
   fetchDone: false,
   fetchStarted: false,
   fetchFinished: false,
@@ -21,6 +25,13 @@ const defaultState = {
 
 const auth = (state = defaultState, action) => {
   switch (action.type) {
+
+    case AUTH_TOGGLE_DISPLAY_MODAL:
+      return {
+        ...state,
+        showModalAuth: !state.showModalAuth
+      };
+
     case AUTH_FETCH_STARTED:
       return {
         ...state,

@@ -10,28 +10,24 @@ class Auth extends Base
 {
     public function get(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $cookieValue = $request->getCookieParam($this->container->get('settings')['cookie_key']);
+        $cookieValue = $request->getCookieParam(getenv('COOKIE_KEY'));
 
         return $this->output($response, [
-            'status' => $cookieValue === $this->container->get('settings')['cookie_value']
+            'status' => $cookieValue === getenv('COOKIE_VALUE')
         ]);
     }
 
   public function post(ServerRequestInterface $request, ResponseInterface $response)
   {
       $payload = json_decode($request->getBody()->getContents(), true);
-      if (!isset($payload['pw']) or !password_verify($payload['pw'], $this->container->get('settings')['auth'])) {
+      if (!isset($payload['pw']) or !password_verify($payload['pw'], getenv('AUTH'))) {
           return $response->withStatus(401);
       }
 
-      $cookieKey = $this->container->get('settings')['cookie_key'];
-      $cookieValue = $this->container->get('settings')['cookie_value'];
-
-      return $response = FigResponseCookies::set($response, SetCookie::create($cookieKey)
-        ->withValue($cookieValue)
+      return $response = FigResponseCookies::set($response, SetCookie::create(getenv('COOKIE_KEY'))
+        ->withValue(getenv('COOKIE_VALUE'))
         ->withPath('/')
         ->rememberForever()
       );
   }
 }
-

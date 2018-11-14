@@ -35,7 +35,7 @@ stop:
 	@docker-compose stop
 
 composer-migrate:
-	@docker-compose run --rm $(SERVER_SERVICE_NAME) vendor/bin/phinx migrate -c config/phinx.php
+	@docker-compose run --rm $(SERVER_SERVICE_NAME) vendor/bin/phinx migrate -c src/phinx/config.php
 
 composer-install:
 	@docker-compose run --rm $(SERVER_SERVICE_NAME) composer install

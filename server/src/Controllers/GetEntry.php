@@ -58,7 +58,9 @@ class GetEntry
        return [
           'id' => $entry['id'],
           'added' => $entry['added'],
-          'comment' => $entry['comment']
+          'distance' => ((int) $entry['distance']) / 1000,
+          'duration' => (int) $entry['duration'],
+          'comment' => $entry['comment'],
        ];
     }
 }

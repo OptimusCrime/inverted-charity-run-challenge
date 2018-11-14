@@ -2,14 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Container, Icon, Menu, Dropdown } from 'semantic-ui-react';
 
-import {
-  changeCurrentChallenge,
-  toggleDisplayModalAuth,
-  toggleDisplayModalEntry,
-  toggleShowGraph
-} from '../../redux/display/actions';
+import MenuSwitchViewContainer from "./menu-switch-view-container";
 import { fetchUpdatedStatus } from '../../redux/status/actions';
 import { fetchUpdatedEntry } from '../../redux/entry/actions';
+import { changeCurrentChallenge as changeCurrentChallengeDispatch } from '../../redux/display/actions';
 
 class MenuContainer extends Component {
 
@@ -27,10 +23,11 @@ class MenuContainer extends Component {
       statusFetchFinished,
       statusFetchFailed,
 
-      loggedIn,
       showGraph,
       challenges,
       currentChallenge,
+
+      changeCurrentChallenge,
     } = this.props;
 
     const numberOfChallenges = challenges.length;
@@ -54,19 +51,15 @@ class MenuContainer extends Component {
                   {challengesList.map((challenge, index) => (
                     <Dropdown.Item
                       onClick={() => {
-                        this.props.changeCurrentChallenge(challenge.identifier, challenges);
+                        changeCurrentChallenge(challenge.identifier, challenges);
 
                         return true;
                       }}
                       key={index}
                     >
-                      {challenge.identifier === currentChallenge.identifier ?
-                        <strong>
-                          {`Challenge #${numberOfChallenges - index}`}
-                        </strong> :
-                        <span>
-                          {`Challenge #${numberOfChallenges - index}`}
-                        </span>
+                      {challenge.identifier === currentChallenge.identifier
+                        ? <strong>{`Challenge #${numberOfChallenges - index}`}</strong>
+                        : <span>{`Challenge #${numberOfChallenges - index}`}</span>
                       }
                     </Dropdown.Item>
                   ))}
@@ -74,30 +67,11 @@ class MenuContainer extends Component {
               </Dropdown>
               <Menu.Item
                 icon={true}
-                onClick={this.props.toggleShowGraph}
+                onClick={() => console.log('TODO')}
               >
                 {showGraph ? <Icon name='list' /> : <Icon name='chart line' />}
               </Menu.Item>
-              <React.Fragment>
-                {loggedIn ?
-                  <React.Fragment>
-                    {currentChallenge.progress.active &&
-                      <Menu.Item
-                        icon={true}
-                        onClick={this.props.toggleDisplayModalEntry}
-                      >
-                        <Icon name='plus' />
-                      </Menu.Item>
-                    }
-                  </React.Fragment> :
-                  <Menu.Item
-                    icon={true}
-                    onClick={this.props.toggleDisplayModalAuth}
-                  >
-                    <Icon name='lock' />
-                  </Menu.Item>
-                }
-              </React.Fragment>
+              <MenuSwitchViewContainer/>
             </React.Fragment>
           }
           <Menu.Item
@@ -120,19 +94,15 @@ const mapStateToProps = ({ auth, status, display }) => ({
   statusFetchFinished: status.fetchFinished,
   statusFetchFailed: status.fetchFailed,
 
-  loggedIn: auth.loggedIn,
   showGraph: display.showGraph,
   currentChallenge: display.currentChallenge,
   challenges: status.statuses,
 });
 
 const mapDispatchToProps = {
-  toggleDisplayModalAuth,
-  toggleDisplayModalEntry,
   fetchUpdatedStatus,
   fetchUpdatedEntry,
-  toggleShowGraph,
-  changeCurrentChallenge
+  changeCurrentChallenge: changeCurrentChallengeDispatch
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuContainer);

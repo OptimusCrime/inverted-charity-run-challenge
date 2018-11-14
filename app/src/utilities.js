@@ -1,5 +1,9 @@
 import differenceInDays from 'date-fns/difference_in_days';
 
+import { DECIMALS_TO_KEEP } from "./constants";
+
+const thousandSepNumber = num => num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+
 export const formatEntryDate = date => date.replace(' ', ' @ ');
 
 const parseDate = str => {
@@ -18,16 +22,14 @@ export const parseProgressDataSet = (entries, start, numberOfDays)  => {
   return new Array(numberOfDays).fill(0).map((_, index) => entriesDays.filter(entry => entry <= index).length);
 };
 
-export const parseGrowthDataSet = (numberOfDays, tick) => new Array(numberOfDays).fill(0).map((_, index) => tick * index);
+export const formatDonations = value => {
+  const donations = value.toFixed(DECIMALS_TO_KEEP);
 
-export const calculateTotalDays = (start, end) => differenceInDays(parseDate(end), parseDate(start)) + 1; // Add one, inclusive count
+  if (donations.includes('.')) {
+    return thousandSepNumber(donations);
+  }
 
-export const parseArea = (above, below) =>
-  new Array(above.length)
-    .fill(0)
-    .map((_, index) => (above[index] > below[index] ? above[index] - below[index] : 0));
+  const [num, dec] = donations.split('.');
 
-export const parseTransparent = (first, second) =>
-  new Array(first.length)
-    .fill(0)
-    .map((_, index) => (first[index] <= second[index] ? first[index] : second[index]));
+  return `${thousandSepNumber(num)}.${dec}`;
+};
